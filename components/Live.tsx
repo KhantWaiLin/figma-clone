@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import CursorChat from "./cursor/CursorChat";
 import { CursorMode, CursorState, Reaction } from "@/types/type";
 import ReactionSelector from "./reaction/ReactionButton";
+import FlyingReaction from "./reaction/FlyingReaction";
+import useInterval from "@/hooks/useInterval";
 
 const Live = () => {
   const others = useOthers();
@@ -41,6 +43,7 @@ const Live = () => {
 
   const handlePointerDown = useCallback(
     (event: React.PointerEvent) => {
+      console.log("pointer down");
       const x = event.clientX - event.currentTarget.getBoundingClientRect().x;
       const y = event.clientY - event.currentTarget.getBoundingClientRect().y;
 
@@ -53,6 +56,24 @@ const Live = () => {
     },
     [cursorState.mode, setCursorState]
   );
+
+  useInterval(() => {
+    if (
+      cursorState.mode === CursorMode.Reaction &&
+      cursorState.isPressed &&
+      cursor
+    ) {
+      setReactions((reactions) =>
+        reactions.concat([
+          {
+            point: { x: cursor.x, y: cursor.y },
+            value: cursorState.reaction,
+            timestamp: Date.now(),
+          },
+        ])
+      );
+    }
+  }, 100);
 
   useEffect(() => {
     const onKeyUp = (e: KeyboardEvent) => {
@@ -102,6 +123,15 @@ const Live = () => {
       className="w-full h-[100vh] flex justify-center items-center text-center"
     >
       <h1 className="text-2xl text-white">Live Block Figma Clone</h1>
+      {reactions.map((r) => (
+        <FlyingReaction
+          key={r.timestamp.toString()}
+          x={r.point.x}
+          y={r.point.y}
+          timestamp={r.timestamp}
+          value={r.value}
+        />
+      ))}
       {cursor && (
         <CursorChat
           cursor={cursor}
@@ -111,7 +141,7 @@ const Live = () => {
         />
       )}
       <LiveCursors others={others} />
-      {cursorState.mode === CursorMode.Reaction && (
+      {cursorState.mode === CursorMode.ReactionSelector && (
         <ReactionSelector setReaction={(reaction) => setReaction(reaction)} />
       )}
     </div>
