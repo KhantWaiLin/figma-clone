@@ -120,7 +120,7 @@ export const handleKeyDown = ({
   }
 
   // check if the key pressed is ctrl/cmd + y (redo)
-  if ((e?.ctrlKey || e?.metaKey) && e.keyCode === 89) {
+  if ((e?.ctrlKey || e?.metaKey) && !e.shiftKey && e.keyCode === 89) {
     redo();
   }
 
