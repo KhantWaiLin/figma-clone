@@ -1,0 +1,8 @@
+{
+  "buildType": 1,
+  "buildCmd": "npm run build",
+  "buildDist": "/Users/khantwailin/Desktop/",
+  "entryPagePath": "index.html",
+  "appID": "figma",
+  "isCompile": false
+}

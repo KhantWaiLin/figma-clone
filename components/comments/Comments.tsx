@@ -1,11 +1,11 @@
-import { ClientSideSuspense } from '@liveblocks/react'
-import React from 'react'
-import { CommentsOverlay } from './CommentsOverlay'
+"use client";
 
-export const Comments = () => {
-  return (
-    <ClientSideSuspense fallback={null}>
-        {()=><CommentsOverlay />}
-    </ClientSideSuspense>
-  )
-}
+import { ClientSideSuspense } from "@liveblocks/react";
+
+import { CommentsOverlay } from "@/components/comments/CommentsOverlay";
+
+export const Comments = () => (
+  <ClientSideSuspense fallback={null}>
+    {() => <CommentsOverlay />}
+  </ClientSideSuspense>
+);
